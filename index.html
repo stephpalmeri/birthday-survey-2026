@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Town Kindergarten &mdash; April &amp; May Birthdays</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #f0f4fa 0%, #e8eef8 50%, #edf2fb 100%);
+    color: #2a3040;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  .container { max-width: 600px; margin: 0 auto; }
+
+  .header { text-align: center; padding: 40px 20px 30px; margin-bottom: 28px; }
+  .header .emoji-row { font-size: 36px; letter-spacing: 8px; margin-bottom: 16px; }
+  .header h1 { font-size: 26px; font-weight: 800; color: #2b5ea7; line-height: 1.3; margin-bottom: 8px; }
+  .header p { font-size: 15px; color: #5f6d82; line-height: 1.6; max-width: 500px; margin: 0 auto; }
+
+  .card {
+    background: #fff; border-radius: 16px; padding: 28px 28px 24px; margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04);
+  }
+  .card-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #2b5ea7; margin-bottom: 14px; }
+  .card h2 { font-size: 18px; font-weight: 700; color: #2c2117; margin-bottom: 6px; }
+  .card .subtitle { font-size: 14px; color: #8292a6; margin-bottom: 18px; line-height: 1.5; }
+
+  label.field-label { display: block; font-size: 14px; font-weight: 600; color: #3a4558; margin-bottom: 6px; }
+  .required::after { content: " *"; color: #2b5ea7; font-weight: 700; }
+
+  input[type="text"], input[type="email"], textarea {
+    width: 100%; padding: 12px 14px; font-family: 'Nunito', sans-serif; font-size: 15px;
+    border: 2px solid #d4dce8; border-radius: 10px; background: #f8fafd; color: #2a3040;
+    transition: border-color 0.2s; margin-bottom: 16px;
+  }
+  input:focus, textarea:focus { outline: none; border-color: #4a8fe7; background: #fff; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .option-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .option-group.horizontal { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  .option-item { position: relative; }
+  .option-item input[type="radio"], .option-item input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .option-item label.pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px;
+    border: 2px solid #d4dce8; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+    transition: all 0.15s; background: #f8fafd; user-select: none;
+  }
+  .option-item label.pill:hover { border-color: #b8c8dc; background: #eef3fa; }
+  .option-item input:checked + label.pill { border-color: #4a8fe7; background: #e8f0fc; color: #2b5ea7; }
+
+  .conditional-fields { display: none; padding: 16px 0 0; }
+  .conditional-fields.visible { display: block; }
+
+  .divider { height: 1px; background: #d4dce8; margin: 18px 0; }
+
+  /* Date voting */
+  .date-vote-section { margin-bottom: 8px; }
+  .vote-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; font-size: 13px; color: #5f6d82; }
+  .vote-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .legend-dot.top { background: #27ae60; }
+  .legend-dot.maybe { background: #f39c12; }
+  .legend-dot.no { background: #e74c3c; }
+
+  .date-card { margin-bottom: 10px; }
+
+  .date-vote-row {
+    display: flex; align-items: center; background: #f8fafd; border: 2px solid #d4dce8;
+    border-radius: 12px; padding: 14px 16px; gap: 12px; transition: border-color 0.15s;
+  }
+  .date-vote-row:hover { border-color: #b8c8dc; }
+  .date-info { flex: 1; min-width: 0; }
+  .date-info .weekend-label { font-size: 15px; font-weight: 700; color: #2a3040; }
+  .date-info .weekend-sub { font-size: 12px; color: #8292a6; margin-top: 1px; }
+  .vote-options { display: flex; gap: 6px; flex-shrink: 0; }
+  .vote-btn { position: relative; }
+  .vote-btn input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .vote-btn label {
+    display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+    border-radius: 10px; border: 2px solid #d4dce8; cursor: pointer; font-size: 18px;
+    transition: all 0.15s; background: #fff; user-select: none;
+  }
+  .vote-btn label:hover { border-color: #ccc; transform: scale(1.05); }
+  .vote-btn input:checked + label.vote-top { border-color: #27ae60; background: #eafaf1; }
+  .vote-btn input:checked + label.vote-maybe { border-color: #f39c12; background: #fef9e7; }
+  .vote-btn input:checked + label.vote-no { border-color: #e74c3c; background: #fdedec; }
+
+  .date-comment {
+    margin-top: 6px; width: 100%; padding: 8px 12px; font-family: 'Nunito', sans-serif;
+    font-size: 13px; border: 1.5px solid #d4dce8; border-radius: 8px; background: #f8fafd;
+    color: #4a5568; transition: border-color 0.2s; margin-bottom: 0;
+  }
+  .date-comment:focus { outline: none; border-color: #4a8fe7; background: #fff; }
+  .date-comment::placeholder { color: #a8b5c8; }
+
+  .date-vote-row.blocked { opacity: 0.4; background: #edf0f5; }
+  .date-vote-row.blocked .weekend-sub { color: #2b5ea7; font-weight: 700; }
+
+  .submit-btn {
+    display: block; width: 100%; padding: 16px; font-family: 'Nunito', sans-serif;
+    font-size: 16px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, #4a8fe7, #2b6cc4); border: none; border-radius: 12px;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 14px rgba(74,143,231,0.3); letter-spacing: 0.5px;
+  }
+  .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(74,143,231,0.4); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .footer-note { text-align: center; font-size: 13px; color: #8292a6; margin-top: 24px; line-height: 1.5; }
+
+  @media (max-width: 480px) {
+    .header h1 { font-size: 22px; }
+    .card { padding: 22px 20px 20px; }
+    .vote-options { gap: 4px; }
+    .vote-btn label { width: 36px; height: 36px; font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="emoji-row">&#127874; &#127880; &#127881;</div>
+    <h1>Town Kindergarten April &amp; May Birthdays</h1>
+    <p>Help us gather interest for a joint birthday celebration for our April and May birthday boys. This should only take a minute or two.</p>
+  </div>
+
+  <!-- About You -->
+  <div class="card">
+    <div class="card-label">About You</div>
+    <h2>Who's filling this out?</h2>
+    <p class="subtitle">Just so we know who to follow up with!</p>
+
+    <label class="field-label required" for="parent-name">Your Name</label>
+    <input type="text" id="parent-name" placeholder="e.g. Jane Smith">
+
+    <label class="field-label required" for="child-name">Your Child(ren) on the Birthday List</label>
+    <input type="text" id="child-name" placeholder="e.g. Liam">
+
+    <label class="field-label required" for="email">Best Email to Reach You</label>
+    <input type="email" id="email" placeholder="e.g. jane@email.com">
+
+    <div class="divider"></div>
+
+    <label class="field-label required">Do you have a significant other who should also be on any planning emails?</label>
+    <div class="option-group horizontal" style="margin-bottom: 0;">
+      <div class="option-item">
+        <input type="radio" id="so-yes" name="has-so" value="yes" onclick="document.getElementById('so-fields').classList.add('visible')">
+        <label class="pill" for="so-yes">Yes</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="so-no" name="has-so" value="no" onclick="document.getElementById('so-fields').classList.remove('visible')">
+        <label class="pill" for="so-no">No / Already included</label>
+      </div>
+    </div>
+
+    <div id="so-fields" class="conditional-fields">
+      <label class="field-label required" for="so-name">Their Name</label>
+      <input type="text" id="so-name" placeholder="e.g. John Smith">
+      <label class="field-label required" for="so-email">Their Email</label>
+      <input type="email" id="so-email" placeholder="e.g. john@email.com">
+    </div>
+  </div>
+
+  <!-- Interest -->
+  <div class="card">
+    <div class="card-label">Interest</div>
+    <h2 class="required">Are you in for a joint party?</h2>
+    <p class="subtitle">No pressure at all!</p>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="radio" id="interest-yes" name="interest" value="yes">
+        <label class="pill" for="interest-yes">&#127881; Yes, we're in!</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="interest-maybe" name="interest" value="maybe">
+        <label class="pill" for="interest-maybe">&#129300; Maybe, assuming the dates work</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="interest-no" name="interest" value="no">
+        <label class="pill" for="interest-no">&#128075; Not this time</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Voting -->
+  <div class="card">
+    <div class="card-label">Date Voting</div>
+    <h2>Which dates work for your family?</h2>
+    <p class="subtitle">Please let us know all of the dates that could possibly work for your family.</p>
+
+    <div class="vote-legend">
+      <span>&#128154; Preferred</span>
+      <span>&#128993; Maybe / Could make it work</span>
+      <span>&#128683; Won't work</span>
+    </div>
+
+    <div class="date-vote-section">
+
+      <div class="date-card">
+        <div class="date-vote-row blocked">
+          <div class="date-info">
+            <div class="weekend-label">Sat &ndash; Sun, April 4 &ndash; 5</div>
+            <div class="weekend-sub">Spring Break</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row blocked">
+          <div class="date-info">
+            <div class="weekend-label">Sat &ndash; Sun, April 11 &ndash; 12</div>
+            <div class="weekend-sub">Spring Break</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Saturday, April 18</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="apr18-top" name="apr18" value="top"><label class="vote-top" for="apr18-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr18-maybe" name="apr18" value="maybe"><label class="vote-maybe" for="apr18-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr18-no" name="apr18" value="no"><label class="vote-no" for="apr18-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="apr18-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Sunday, April 19</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="apr19-top" name="apr19" value="top"><label class="vote-top" for="apr19-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr19-maybe" name="apr19" value="maybe"><label class="vote-maybe" for="apr19-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr19-no" name="apr19" value="no"><label class="vote-no" for="apr19-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="apr19-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Saturday, April 25</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="apr25-top" name="apr25" value="top"><label class="vote-top" for="apr25-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr25-maybe" name="apr25" value="maybe"><label class="vote-maybe" for="apr25-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr25-no" name="apr25" value="no"><label class="vote-no" for="apr25-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="apr25-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Sunday, April 26</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="apr26-top" name="apr26" value="top"><label class="vote-top" for="apr26-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr26-maybe" name="apr26" value="maybe"><label class="vote-maybe" for="apr26-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="apr26-no" name="apr26" value="no"><label class="vote-no" for="apr26-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="apr26-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row blocked">
+          <div class="date-info">
+            <div class="weekend-label">Sat &ndash; Sun, May 2 &ndash; 3</div>
+            <div class="weekend-sub">Town Camping Trip</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Saturday, May 9</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may9-top" name="may9" value="top"><label class="vote-top" for="may9-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may9-maybe" name="may9" value="maybe"><label class="vote-maybe" for="may9-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may9-no" name="may9" value="no"><label class="vote-no" for="may9-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may9-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row blocked">
+          <div class="date-info">
+            <div class="weekend-label">Sunday, May 10</div>
+            <div class="weekend-sub">Mother's Day</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Saturday, May 16</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may16-top" name="may16" value="top"><label class="vote-top" for="may16-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may16-maybe" name="may16" value="maybe"><label class="vote-maybe" for="may16-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may16-no" name="may16" value="no"><label class="vote-no" for="may16-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may16-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Sunday, May 17</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may17-top" name="may17" value="top"><label class="vote-top" for="may17-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may17-maybe" name="may17" value="maybe"><label class="vote-maybe" for="may17-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may17-no" name="may17" value="no"><label class="vote-no" for="may17-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may17-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info">
+            <div class="weekend-label">Saturday, May 23</div>
+            <div class="weekend-sub">Memorial Day Weekend</div>
+          </div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may23-top" name="may23" value="top"><label class="vote-top" for="may23-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may23-maybe" name="may23" value="maybe"><label class="vote-maybe" for="may23-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may23-no" name="may23" value="no"><label class="vote-no" for="may23-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may23-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info">
+            <div class="weekend-label">Sunday, May 24</div>
+            <div class="weekend-sub">Memorial Day Weekend</div>
+          </div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may24-top" name="may24" value="top"><label class="vote-top" for="may24-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may24-maybe" name="may24" value="maybe"><label class="vote-maybe" for="may24-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may24-no" name="may24" value="no"><label class="vote-no" for="may24-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may24-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Saturday, May 30</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may30-top" name="may30" value="top"><label class="vote-top" for="may30-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may30-maybe" name="may30" value="maybe"><label class="vote-maybe" for="may30-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may30-no" name="may30" value="no"><label class="vote-no" for="may30-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may30-comment">
+      </div>
+
+      <div class="date-card">
+        <div class="date-vote-row">
+          <div class="date-info"><div class="weekend-label">Sunday, May 31</div></div>
+          <div class="vote-options">
+            <div class="vote-btn"><input type="radio" id="may31-top" name="may31" value="top"><label class="vote-top" for="may31-top" title="Preferred">&#128154;</label></div>
+            <div class="vote-btn"><input type="radio" id="may31-maybe" name="may31" value="maybe"><label class="vote-maybe" for="may31-maybe" title="Maybe / Could make it work">&#128993;</label></div>
+            <div class="vote-btn"><input type="radio" id="may31-no" name="may31" value="no"><label class="vote-no" for="may31-no" title="Won't work">&#128683;</label></div>
+          </div>
+        </div>
+        <input type="text" class="date-comment" placeholder="Any notes about this date?" id="may31-comment">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Anything Else -->
+  <div class="card">
+    <div class="card-label">Anything Else?</div>
+    <h2>Any other thoughts, questions, or notes?</h2>
+    <p class="subtitle">Totally optional!</p>
+    <textarea id="anything-else" placeholder="Allergies, scheduling quirks, ideas, questions — anything at all!"></textarea>
+  </div>
+
+  <button class="submit-btn" id="submit-btn" onclick="submitForm()">Submit</button>
+  <p class="footer-note">Questions? Just reply to Steph's email. Thanks!</p>
+
+</div>
+
+<script>
+  // ⚠️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW ⚠️
+  var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_k19zcQVMOlKApcnQnUHQGAZeRD2aKC12gHyslyFXOVNqnXfXF_ZpO9huDDeFbvzo9A/exec";
+
+  function submitForm() {
+    // Validation
+    var errors = [];
+    var name = document.getElementById('parent-name').value.trim();
+    var child = document.getElementById('child-name').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var hasSO = document.querySelector('input[name="has-so"]:checked');
+    var interest = document.querySelector('input[name="interest"]:checked');
+
+    if (!name) errors.push("Your Name");
+    if (!child) errors.push("Your Child(ren)");
+    if (!email) errors.push("Best Email");
+    if (!hasSO) errors.push("Significant other question");
+    if (!interest) errors.push("Interest (are you in?)");
+
+    // If "Yes" for SO, require their name and email
+    if (hasSO && hasSO.value === "yes") {
+      var soName = document.getElementById('so-name').value.trim();
+      var soEmail = document.getElementById('so-email').value.trim();
+      if (!soName) errors.push("Significant other's Name");
+      if (!soEmail) errors.push("Significant other's Email");
+    }
+
+    if (errors.length > 0) {
+      alert("Please fill in the following required fields:\n\n• " + errors.join("\n• "));
+      return;
+    }
+
+    // Collect all data
+    var data = {
+      "parent-name": name,
+      "child-name": child,
+      "email": email,
+      "has-so": hasSO ? hasSO.value : "",
+      "so-name": document.getElementById('so-name').value.trim(),
+      "so-email": document.getElementById('so-email').value.trim(),
+      "interest": interest ? interest.value : ""
+    };
+
+    // Date votes and comments
+    var dates = ["apr18","apr19","apr25","apr26","may9","may16","may17","may23","may24","may30","may31"];
+    dates.forEach(function(d) {
+      var vote = document.querySelector('input[name="' + d + '"]:checked');
+      data[d] = vote ? vote.value : "";
+      var comment = document.getElementById(d + '-comment');
+      data[d + '-comment'] = comment ? comment.value.trim() : "";
+    });
+
+    data["anything-else"] = document.getElementById('anything-else').value.trim();
+
+    // Submit
+    var btn = document.getElementById('submit-btn');
+    btn.textContent = "Submitting...";
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(function() {
+      btn.textContent = "Submitted \u2714";
+      btn.style.background = "#27ae60";
+      btn.style.boxShadow = "0 4px 14px rgba(39,174,96,0.3)";
+      alert("Thank you! Your responses have been recorded. \uD83C\uDF89");
+    })
+    .catch(function(err) {
+      btn.textContent = "Submit";
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      alert("Something went wrong. Please try again or reach out to Steph directly.");
+    });
+  }
+</script>
+</body>
+</html>
