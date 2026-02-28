@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Town Kindergarten &mdash; Party Planning Survey</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #f0f4fa 0%, #e8eef8 50%, #edf2fb 100%);
+    color: #2a3040;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  .container { max-width: 600px; margin: 0 auto; }
+
+  .header { text-align: center; padding: 40px 20px 30px; margin-bottom: 28px; }
+  .header .emoji-row { font-size: 36px; letter-spacing: 8px; margin-bottom: 16px; }
+  .header h1 { font-size: 26px; font-weight: 800; color: #2b5ea7; line-height: 1.3; margin-bottom: 8px; }
+  .header p { font-size: 15px; color: #5f6d82; line-height: 1.6; max-width: 500px; margin: 0 auto; }
+
+  .card {
+    background: #fff; border-radius: 16px; padding: 28px 28px 24px; margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04);
+  }
+  .card-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #2b5ea7; margin-bottom: 14px; }
+  .card h2 { font-size: 18px; font-weight: 700; color: #2c2117; margin-bottom: 6px; }
+  .card .subtitle { font-size: 14px; color: #8292a6; margin-bottom: 18px; line-height: 1.5; }
+
+  label.field-label { display: block; font-size: 14px; font-weight: 600; color: #3a4558; margin-bottom: 6px; }
+  .required::after { content: " *"; color: #2b5ea7; font-weight: 700; }
+
+  input[type="text"], input[type="email"], textarea {
+    width: 100%; padding: 12px 14px; font-family: 'Nunito', sans-serif; font-size: 15px;
+    border: 2px solid #d4dce8; border-radius: 10px; background: #f8fafd; color: #2a3040;
+    transition: border-color 0.2s; margin-bottom: 16px;
+  }
+  input:focus, textarea:focus { outline: none; border-color: #4a8fe7; background: #fff; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .option-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .option-group.horizontal { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  .option-item { position: relative; }
+  .option-item input[type="radio"], .option-item input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .option-item label.pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px;
+    border: 2px solid #d4dce8; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px;
+    transition: all 0.15s; background: #f8fafd; user-select: none;
+  }
+  .option-item label.pill:hover { border-color: #b8c8dc; background: #eef3fa; }
+  .option-item input:checked + label.pill { border-color: #4a8fe7; background: #e8f0fc; color: #2b5ea7; }
+
+  .divider { height: 1px; background: #d4dce8; margin: 18px 0; }
+
+  .submit-btn {
+    display: block; width: 100%; padding: 16px; font-family: 'Nunito', sans-serif;
+    font-size: 16px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, #4a8fe7, #2b6cc4); border: none; border-radius: 12px;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 14px rgba(74,143,231,0.3); letter-spacing: 0.5px;
+  }
+  .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(74,143,231,0.4); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .footer-note { text-align: center; font-size: 13px; color: #8292a6; margin-top: 24px; line-height: 1.5; }
+
+  @media (max-width: 480px) {
+    .header h1 { font-size: 22px; }
+    .card { padding: 22px 20px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="emoji-row">&#127874; &#127880; &#127881;</div>
+    <h1>Town Kindergarten Spring Birthday Party Planning</h1>
+    <p>Now that we have a date, let's figure out the details! This quick survey will help us plan the best party for our April, May &amp; June birthday boys.</p>
+  </div>
+
+  <!-- About You -->
+  <div class="card">
+    <div class="card-label">About You</div>
+    <h2>Who's filling this out?</h2>
+    <p class="subtitle">Just so we know who's who!</p>
+
+    <label class="field-label required" for="parent-name">Your Name</label>
+    <input type="text" id="parent-name" placeholder="e.g. Jane Smith">
+
+    <label class="field-label required" for="child-name">Your Child(ren) on the Birthday List</label>
+    <input type="text" id="child-name" placeholder="e.g. Liam">
+
+    <label class="field-label required" for="email">Best Email to Reach You</label>
+    <input type="email" id="email" placeholder="e.g. jane@email.com">
+  </div>
+
+  <!-- Time of Day -->
+  <div class="card">
+    <div class="card-label">Timing</div>
+    <h2 class="required">What time of day works best for your family?</h2>
+    <p class="subtitle">Select all that apply.</p>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="checkbox" id="time-morning" name="time" value="morning">
+        <label class="pill" for="time-morning">&#9728;&#65039; Morning (10am &ndash; 12pm)</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="time-lunch" name="time" value="lunch">
+        <label class="pill" for="time-lunch">&#127860; Lunchtime (11:30am &ndash; 1:30pm)</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="time-afternoon" name="time" value="afternoon">
+        <label class="pill" for="time-afternoon">&#127774; Afternoon (2 &ndash; 4pm)</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Food -->
+  <div class="card">
+    <div class="card-label">Food</div>
+    <h2 class="required">What's your preference for food?</h2>
+    <p class="subtitle">This may depend on the venue and time of day &mdash; just tell us your general preference.</p>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="radio" id="food-potluck" name="food" value="potluck">
+        <label class="pill" for="food-potluck">&#129367; Potluck (each family brings a dish)</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="food-pizza" name="food" value="pizza">
+        <label class="pill" for="food-pizza">&#127829; Pizza delivery / simple catering</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="food-snacks" name="food" value="snacks">
+        <label class="pill" for="food-snacks">&#127871; Just snacks and drinks</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="food-other" name="food" value="other">
+        <label class="pill" for="food-other">&#128172; Other</label>
+      </div>
+    </div>
+    <div id="food-other-field" style="display:none;">
+      <label class="field-label" for="food-other-text">What did you have in mind?</label>
+      <input type="text" id="food-other-text" placeholder="e.g. taco truck, sandwich trays, etc.">
+    </div>
+  </div>
+
+  <!-- Cake -->
+  <div class="card">
+    <div class="card-label">Cake / Treats</div>
+    <h2 class="required">What works best for cake?</h2>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="radio" id="cake-sheet" name="cake" value="sheet-cake">
+        <label class="pill" for="cake-sheet">&#127874; One or two big sheet cakes (split the cost)</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="cake-cupcakes" name="cake" value="cupcakes">
+        <label class="pill" for="cake-cupcakes">&#129473; Cupcakes or simple treats</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="cake-nopref" name="cake" value="no-preference">
+        <label class="pill" for="cake-nopref">&#128077; No preference</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Venue Type -->
+  <div class="card">
+    <div class="card-label">Venue</div>
+    <h2 class="required">What type of party sounds best?</h2>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="radio" id="venue-park" name="venue" value="outdoor-park">
+        <label class="pill" for="venue-park">&#127795; Outdoor park party (option for bouncy house and/or entertainment)</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="venue-indoor" name="venue" value="indoor">
+        <label class="pill" for="venue-indoor">&#127968; Indoor venue (gym, play space, etc.)</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="venue-outdoor-other" name="venue" value="outdoor-other">
+        <label class="pill" for="venue-outdoor-other">&#127773; Outdoor venue (non-park)</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="venue-nopref" name="venue" value="no-preference">
+        <label class="pill" for="venue-nopref">&#128077; No preference</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activities -->
+  <div class="card">
+    <div class="card-label">Activities</div>
+    <h2>What sounds fun? <span style="font-size:14px; font-weight:400; color:#8292a6;">(select all that apply)</span></h2>
+    <p class="subtitle">Help us get a sense of what the kids would enjoy most.</p>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="checkbox" id="act-bouncy" name="activities" value="bouncy-house">
+        <label class="pill" for="act-bouncy">&#127752; Bouncy house / inflatable</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="act-entertainment" name="activities" value="entertainment">
+        <label class="pill" for="act-entertainment">&#127913; Entertainment (magician, balloon artist, face painting, etc.)</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="act-sports" name="activities" value="sports">
+        <label class="pill" for="act-sports">&#9917; Sports / free play</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="act-water" name="activities" value="water-play">
+        <label class="pill" for="act-water">&#128166; Water play (sprinklers, water balloons)</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="act-craft" name="activities" value="craft">
+        <label class="pill" for="act-craft">&#127912; Craft or art station</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="act-nopref" name="activities" value="no-preference">
+        <label class="pill" for="act-nopref">&#128077; No preference / happy with anything</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Siblings -->
+  <div class="card">
+    <div class="card-label">Siblings</div>
+    <h2 class="required">Would siblings attend?</h2>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="radio" id="siblings-yes" name="siblings" value="yes">
+        <label class="pill" for="siblings-yes">&#128102;&#128103; Yes, likely</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="siblings-maybe" name="siblings" value="maybe">
+        <label class="pill" for="siblings-maybe">&#129300; Maybe, depends on logistics</label>
+      </div>
+      <div class="option-item">
+        <input type="radio" id="siblings-no" name="siblings" value="no">
+        <label class="pill" for="siblings-no">&#127881; No, just the birthday boy</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Volunteer -->
+  <div class="card">
+    <div class="card-label">Helping Out</div>
+    <h2>Would you be willing to help with any of the following? <span style="font-size:14px; font-weight:400; color:#8292a6;">(select all that apply)</span></h2>
+    <p class="subtitle">No pressure &mdash; just trying to see where we have willing hands!</p>
+    <div class="option-group">
+      <div class="option-item">
+        <input type="checkbox" id="help-venue" name="help" value="venue">
+        <label class="pill" for="help-venue">&#128205; Researching / securing a venue or park permit</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-entertainment" name="help" value="entertainment">
+        <label class="pill" for="help-entertainment">&#127913; Booking entertainment or rentals (bouncy house, etc.)</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-food" name="help" value="food">
+        <label class="pill" for="help-food">&#127829; Snacks / food coordination</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-cake" name="help" value="cake">
+        <label class="pill" for="help-cake">&#127874; Cake / cupcakes</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-decorations" name="help" value="decorations">
+        <label class="pill" for="help-decorations">&#127880; Decorations</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-invite" name="help" value="invite">
+        <label class="pill" for="help-invite">&#128233; Invite / communication to the group</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-setup" name="help" value="setup">
+        <label class="pill" for="help-setup">&#128170; Day-of setup / cleanup</label>
+      </div>
+      <div class="option-item">
+        <input type="checkbox" id="help-anything" name="help" value="assign-me">
+        <label class="pill" for="help-anything">&#128588; Happy to help but no preference &mdash; assign me something!</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anything Else -->
+  <div class="card">
+    <div class="card-label">Anything Else?</div>
+    <h2>Any other thoughts, ideas, or notes?</h2>
+    <p class="subtitle">Totally optional!</p>
+    <textarea id="anything-else" placeholder="Venue ideas, food allergies, activity suggestions, questions — anything at all!"></textarea>
+  </div>
+
+  <button class="submit-btn" id="submit-btn" onclick="submitForm()">Submit</button>
+  <p class="footer-note">Questions? Just reply to Steph's email. Thanks!</p>
+
+</div>
+
+<iframe name="hidden-iframe" id="hidden-iframe" style="display:none;"></iframe>
+<form id="hidden-form" method="POST" target="hidden-iframe"
+  action="https://script.google.com/macros/s/AKfycbylTb9glzUlIulD7oKOzm2-lelt1CViGGeyvcoHhfyT1ZhV6y8FHSDfU7_2QLs-beL4Bg/exec">
+  <input type="hidden" name="data" id="form-data">
+</form>
+
+<script>
+  // Show/hide "other" food text field
+  document.querySelectorAll('input[name="food"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.getElementById('food-other-field').style.display =
+        this.value === 'other' ? 'block' : 'none';
+    });
+  });
+
+  function submitForm() {
+    // Validation
+    var errors = [];
+    var name = document.getElementById('parent-name').value.trim();
+    var child = document.getElementById('child-name').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var timeChecked = document.querySelectorAll('input[name="time"]:checked');
+    var food = document.querySelector('input[name="food"]:checked');
+    var cake = document.querySelector('input[name="cake"]:checked');
+    var venue = document.querySelector('input[name="venue"]:checked');
+    var siblings = document.querySelector('input[name="siblings"]:checked');
+
+    if (!name) errors.push("Your Name");
+    if (!child) errors.push("Your Child(ren)");
+    if (!email) errors.push("Best Email");
+    if (timeChecked.length === 0) errors.push("Time of day");
+    if (!food) errors.push("Food preference");
+    if (!cake) errors.push("Cake preference");
+    if (!venue) errors.push("Venue type");
+    if (!siblings) errors.push("Siblings question");
+
+    if (errors.length > 0) {
+      alert("Please fill in the following required fields:\n\n\u2022 " + errors.join("\n\u2022 "));
+      return;
+    }
+
+    // Collect data
+    var data = {
+      "survey": "planning",
+      "parent-name": name,
+      "child-name": child,
+      "email": email
+    };
+
+    // Time (multi-select)
+    var times = [];
+    timeChecked.forEach(function(cb) { times.push(cb.value); });
+    data["time"] = times.join(", ");
+
+    // Food
+    data["food"] = food.value;
+    if (food.value === "other") {
+      data["food-other"] = document.getElementById('food-other-text').value.trim();
+    }
+
+    // Cake
+    data["cake"] = cake.value;
+
+    // Venue
+    data["venue"] = venue.value;
+
+    // Activities (multi-select)
+    var activities = [];
+    document.querySelectorAll('input[name="activities"]:checked').forEach(function(cb) {
+      activities.push(cb.value);
+    });
+    data["activities"] = activities.join(", ");
+
+    // Siblings
+    data["siblings"] = siblings.value;
+
+    // Help (multi-select)
+    var helpItems = [];
+    document.querySelectorAll('input[name="help"]:checked').forEach(function(cb) {
+      helpItems.push(cb.value);
+    });
+    data["help"] = helpItems.join(", ");
+
+    // Anything else
+    data["anything-else"] = document.getElementById('anything-else').value.trim();
+
+    // Submit
+    var btn = document.getElementById('submit-btn');
+    btn.textContent = "Submitting...";
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+
+    document.getElementById('form-data').value = JSON.stringify(data);
+    document.getElementById('hidden-form').submit();
+
+    setTimeout(function() {
+      window.location.href = "thank-you.html";
+    }, 1500);
+  }
+</script>
+</body>
+</html>
