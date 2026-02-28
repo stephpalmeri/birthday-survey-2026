@@ -68,9 +68,37 @@
 
   .footer-note { text-align: center; font-size: 13px; color: #8292a6; margin-top: 24px; line-height: 1.5; }
 
+  /* Time voting (green/yellow/red) */
+  .vote-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; font-size: 13px; color: #5f6d82; }
+  .vote-legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  .vote-card { margin-bottom: 10px; }
+  .vote-row {
+    display: flex; align-items: center; background: #f8fafd; border: 2px solid #d4dce8;
+    border-radius: 12px; padding: 14px 16px; gap: 12px; transition: border-color 0.15s;
+  }
+  .vote-row:hover { border-color: #b8c8dc; }
+  .vote-info { flex: 1; min-width: 0; }
+  .vote-info .vote-label { font-size: 15px; font-weight: 700; color: #2a3040; }
+  .vote-info .vote-sub { font-size: 12px; color: #8292a6; margin-top: 1px; }
+  .vote-options { display: flex; gap: 6px; flex-shrink: 0; }
+  .vote-btn { position: relative; }
+  .vote-btn input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .vote-btn label {
+    display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+    border-radius: 10px; border: 2px solid #d4dce8; cursor: pointer; font-size: 18px;
+    transition: all 0.15s; background: #fff; user-select: none;
+  }
+  .vote-btn label:hover { border-color: #ccc; transform: scale(1.05); }
+  .vote-btn input:checked + label.vote-top { border-color: #27ae60; background: #eafaf1; }
+  .vote-btn input:checked + label.vote-maybe { border-color: #f39c12; background: #fef9e7; }
+  .vote-btn input:checked + label.vote-no { border-color: #e74c3c; background: #fdedec; }
+
   @media (max-width: 480px) {
     .header h1 { font-size: 22px; }
     .card { padding: 22px 20px 20px; }
+    .vote-options { gap: 4px; }
+    .vote-btn label { width: 36px; height: 36px; font-size: 16px; }
   }
 </style>
 </head>
@@ -80,7 +108,7 @@
   <div class="header">
     <div class="emoji-row">&#127874; &#127880; &#127881;</div>
     <h1>Town Kindergarten Spring Birthday Party Planning</h1>
-    <p>Now that we have a date, let's figure out the details! This quick survey will help us plan the best party for our April, May &amp; June birthday boys.</p>
+    <p>Save the date for April 25th, 2026. This quick survey will help us gather party preferences and families to take the lead on planning different aspects of the party for our April, May &amp; June birthday boys.</p>
   </div>
 
   <!-- About You -->
@@ -102,69 +130,54 @@
   <!-- Time of Day -->
   <div class="card">
     <div class="card-label">Timing</div>
-    <h2 class="required">What time of day works best for your family?</h2>
-    <p class="subtitle">Select all that apply.</p>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="checkbox" id="time-morning" name="time" value="morning">
-        <label class="pill" for="time-morning">&#9728;&#65039; Morning (10am &ndash; 12pm)</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="time-lunch" name="time" value="lunch">
-        <label class="pill" for="time-lunch">&#127860; Lunchtime (11:30am &ndash; 1:30pm)</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="time-afternoon" name="time" value="afternoon">
-        <label class="pill" for="time-afternoon">&#127774; Afternoon (2 &ndash; 4pm)</label>
-      </div>
-    </div>
-  </div>
+    <h2>What time of day works best for your family?</h2>
+    <p class="subtitle">Rate each option so we can find the best fit for everyone.</p>
 
-  <!-- Food -->
-  <div class="card">
-    <div class="card-label">Food</div>
-    <h2 class="required">What's your preference for food?</h2>
-    <p class="subtitle">This may depend on the venue and time of day &mdash; just tell us your general preference.</p>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="radio" id="food-potluck" name="food" value="potluck">
-        <label class="pill" for="food-potluck">&#129367; Potluck (each family brings a dish)</label>
-      </div>
-      <div class="option-item">
-        <input type="radio" id="food-pizza" name="food" value="pizza">
-        <label class="pill" for="food-pizza">&#127829; Pizza delivery / simple catering</label>
-      </div>
-      <div class="option-item">
-        <input type="radio" id="food-snacks" name="food" value="snacks">
-        <label class="pill" for="food-snacks">&#127871; Just snacks and drinks</label>
-      </div>
-      <div class="option-item">
-        <input type="radio" id="food-other" name="food" value="other">
-        <label class="pill" for="food-other">&#128172; Other</label>
-      </div>
+    <div class="vote-legend">
+      <span>&#128154; Preferred</span>
+      <span>&#128993; Could work</span>
+      <span>&#128683; Won't work</span>
     </div>
-    <div id="food-other-field" style="display:none;">
-      <label class="field-label" for="food-other-text">What did you have in mind?</label>
-      <input type="text" id="food-other-text" placeholder="e.g. taco truck, sandwich trays, etc.">
-    </div>
-  </div>
 
-  <!-- Cake -->
-  <div class="card">
-    <div class="card-label">Cake / Treats</div>
-    <h2 class="required">What works best for cake?</h2>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="radio" id="cake-sheet" name="cake" value="sheet-cake">
-        <label class="pill" for="cake-sheet">&#127874; One or two big sheet cakes (split the cost)</label>
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info">
+          <div class="vote-label">&#9728;&#65039; Morning</div>
+          <div class="vote-sub">10am &ndash; 12pm</div>
+        </div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="morning-top" name="time-morning" value="top"><label class="vote-top" for="morning-top" title="Preferred">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="morning-maybe" name="time-morning" value="maybe"><label class="vote-maybe" for="morning-maybe" title="Could work">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="morning-no" name="time-morning" value="no"><label class="vote-no" for="morning-no" title="Won't work">&#128683;</label></div>
+        </div>
       </div>
-      <div class="option-item">
-        <input type="radio" id="cake-cupcakes" name="cake" value="cupcakes">
-        <label class="pill" for="cake-cupcakes">&#129473; Cupcakes or simple treats</label>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info">
+          <div class="vote-label">&#127860; Lunchtime</div>
+          <div class="vote-sub">11:30am &ndash; 1:30pm</div>
+        </div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="lunch-top" name="time-lunch" value="top"><label class="vote-top" for="lunch-top" title="Preferred">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="lunch-maybe" name="time-lunch" value="maybe"><label class="vote-maybe" for="lunch-maybe" title="Could work">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="lunch-no" name="time-lunch" value="no"><label class="vote-no" for="lunch-no" title="Won't work">&#128683;</label></div>
+        </div>
       </div>
-      <div class="option-item">
-        <input type="radio" id="cake-nopref" name="cake" value="no-preference">
-        <label class="pill" for="cake-nopref">&#128077; No preference</label>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info">
+          <div class="vote-label">&#127774; Afternoon</div>
+          <div class="vote-sub">2 &ndash; 4pm</div>
+        </div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="afternoon-top" name="time-afternoon" value="top"><label class="vote-top" for="afternoon-top" title="Preferred">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="afternoon-maybe" name="time-afternoon" value="maybe"><label class="vote-maybe" for="afternoon-maybe" title="Could work">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="afternoon-no" name="time-afternoon" value="no"><label class="vote-no" for="afternoon-no" title="Won't work">&#128683;</label></div>
+        </div>
       </div>
     </div>
   </div>
@@ -172,119 +185,287 @@
   <!-- Venue Type -->
   <div class="card">
     <div class="card-label">Venue</div>
-    <h2 class="required">What type of party sounds best?</h2>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="radio" id="venue-park" name="venue" value="outdoor-park">
-        <label class="pill" for="venue-park">&#127795; Outdoor park party (option for bouncy house and/or entertainment)</label>
-      </div>
-      <div class="option-item">
-        <input type="radio" id="venue-indoor" name="venue" value="indoor">
-        <label class="pill" for="venue-indoor">&#127968; Indoor venue (gym, play space, etc.)</label>
-      </div>
-      <div class="option-item">
-        <input type="radio" id="venue-outdoor-other" name="venue" value="outdoor-other">
-        <label class="pill" for="venue-outdoor-other">&#127773; Outdoor venue (non-park)</label>
-      </div>
-      <div class="option-item">
-        <input type="radio" id="venue-nopref" name="venue" value="no-preference">
-        <label class="pill" for="venue-nopref">&#128077; No preference</label>
+    <h2>Where would you like to host the party?</h2>
+    <p class="subtitle">You can like more than one!</p>
+
+    <div class="vote-legend">
+      <span>&#128154; Love it</span>
+      <span>&#128993; Could work</span>
+      <span>&#128683; Not for us</span>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127795; Outdoor park party</div><div class="vote-sub">Option for bouncy house and/or entertainment</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="venue-park-top" name="venue-park" value="top"><label class="vote-top" for="venue-park-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="venue-park-maybe" name="venue-park" value="maybe"><label class="vote-maybe" for="venue-park-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="venue-park-no" name="venue-park" value="no"><label class="vote-no" for="venue-park-no">&#128683;</label></div>
+        </div>
       </div>
     </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127968; Indoor venue</div><div class="vote-sub">Gym, play space, etc.</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="venue-indoor-top" name="venue-indoor" value="top"><label class="vote-top" for="venue-indoor-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="venue-indoor-maybe" name="venue-indoor" value="maybe"><label class="vote-maybe" for="venue-indoor-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="venue-indoor-no" name="venue-indoor" value="no"><label class="vote-no" for="venue-indoor-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127773; Outdoor venue (non-park)</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="venue-other-top" name="venue-other" value="top"><label class="vote-top" for="venue-other-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="venue-other-maybe" name="venue-other" value="maybe"><label class="vote-maybe" for="venue-other-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="venue-other-no" name="venue-other" value="no"><label class="vote-no" for="venue-other-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <label class="field-label" for="venue-comments" style="margin-top: 12px;">Venue comments</label>
+    <textarea id="venue-comments" rows="2" placeholder="Please share any thoughts you have on venues and your selections"></textarea>
   </div>
 
   <!-- Activities -->
   <div class="card">
     <div class="card-label">Activities</div>
-    <h2>What sounds fun? <span style="font-size:14px; font-weight:400; color:#8292a6;">(select all that apply)</span></h2>
-    <p class="subtitle">Help us get a sense of what the kids would enjoy most.</p>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="checkbox" id="act-bouncy" name="activities" value="bouncy-house">
-        <label class="pill" for="act-bouncy">&#127752; Bouncy house / inflatable</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="act-entertainment" name="activities" value="entertainment">
-        <label class="pill" for="act-entertainment">&#127913; Entertainment (magician, balloon artist, face painting, etc.)</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="act-sports" name="activities" value="sports">
-        <label class="pill" for="act-sports">&#9917; Sports / free play</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="act-water" name="activities" value="water-play">
-        <label class="pill" for="act-water">&#128166; Water play (sprinklers, water balloons)</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="act-craft" name="activities" value="craft">
-        <label class="pill" for="act-craft">&#127912; Craft or art station</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="act-nopref" name="activities" value="no-preference">
-        <label class="pill" for="act-nopref">&#128077; No preference / happy with anything</label>
+    <h2>Depending on venue, what activities would you be interested in having for the boys?</h2>
+    <p class="subtitle">You can like more than one!</p>
+
+    <div class="vote-legend">
+      <span>&#128154; Love it</span>
+      <span>&#128993; Could work</span>
+      <span>&#128683; Not for us</span>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127752; Bouncy house / inflatable</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="act-bouncy-top" name="act-bouncy" value="top"><label class="vote-top" for="act-bouncy-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-bouncy-maybe" name="act-bouncy" value="maybe"><label class="vote-maybe" for="act-bouncy-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-bouncy-no" name="act-bouncy" value="no"><label class="vote-no" for="act-bouncy-no">&#128683;</label></div>
+        </div>
       </div>
     </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127913; Entertainment</div><div class="vote-sub">Magician, balloon artist, face painting, etc.</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="act-ent-top" name="act-entertainment" value="top"><label class="vote-top" for="act-ent-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-ent-maybe" name="act-entertainment" value="maybe"><label class="vote-maybe" for="act-ent-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-ent-no" name="act-entertainment" value="no"><label class="vote-no" for="act-ent-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#9917; Sports / free play</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="act-sports-top" name="act-sports" value="top"><label class="vote-top" for="act-sports-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-sports-maybe" name="act-sports" value="maybe"><label class="vote-maybe" for="act-sports-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-sports-no" name="act-sports" value="no"><label class="vote-no" for="act-sports-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127912; Craft or art station</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="act-craft-top" name="act-craft" value="top"><label class="vote-top" for="act-craft-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-craft-maybe" name="act-craft" value="maybe"><label class="vote-maybe" for="act-craft-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="act-craft-no" name="act-craft" value="no"><label class="vote-no" for="act-craft-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <label class="field-label" for="activity-comments" style="margin-top: 12px;">Other activity ideas or comments</label>
+    <textarea id="activity-comments" rows="2" placeholder="Tell us more about your preferences or other ideas!"></textarea>
   </div>
 
-  <!-- Siblings -->
+  <!-- Cake -->
   <div class="card">
-    <div class="card-label">Siblings</div>
-    <h2 class="required">Would siblings attend?</h2>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="radio" id="siblings-yes" name="siblings" value="yes">
-        <label class="pill" for="siblings-yes">&#128102;&#128103; Yes, likely</label>
+    <div class="card-label">Cake / Treats</div>
+    <h2>What works best for cake?</h2>
+    <p class="subtitle">You can like more than one!</p>
+
+    <div class="vote-legend">
+      <span>&#128154; Love it</span>
+      <span>&#128993; Could work</span>
+      <span>&#128683; Not for us</span>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127874; Sheet cake(s)</div><div class="vote-sub">One or two big cakes, split the cost</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="cake-sheet-top" name="cake-sheet" value="top"><label class="vote-top" for="cake-sheet-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="cake-sheet-maybe" name="cake-sheet" value="maybe"><label class="vote-maybe" for="cake-sheet-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="cake-sheet-no" name="cake-sheet" value="no"><label class="vote-no" for="cake-sheet-no">&#128683;</label></div>
+        </div>
       </div>
-      <div class="option-item">
-        <input type="radio" id="siblings-maybe" name="siblings" value="maybe">
-        <label class="pill" for="siblings-maybe">&#129300; Maybe, depends on logistics</label>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#129473; Cupcakes or simple treats</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="cake-cupcakes-top" name="cake-cupcakes" value="top"><label class="vote-top" for="cake-cupcakes-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="cake-cupcakes-maybe" name="cake-cupcakes" value="maybe"><label class="vote-maybe" for="cake-cupcakes-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="cake-cupcakes-no" name="cake-cupcakes" value="no"><label class="vote-no" for="cake-cupcakes-no">&#128683;</label></div>
+        </div>
       </div>
+    </div>
+
+    <div class="option-group" style="margin-top: 12px;">
       <div class="option-item">
-        <input type="radio" id="siblings-no" name="siblings" value="no">
-        <label class="pill" for="siblings-no">&#127881; No, just the birthday boy</label>
+        <input type="checkbox" id="cake-nopref" name="cake-nopref" value="yes">
+        <label class="pill" for="cake-nopref">&#128075; No preference &mdash; happy with whatever!</label>
       </div>
     </div>
   </div>
 
-  <!-- Volunteer -->
+  <!-- Food -->
+  <div class="card">
+    <div class="card-label">Food</div>
+    <h2>What's your preference for food?</h2>
+    <p class="subtitle">This may depend on venue and time of day &mdash; just give us your general vibe. You can like more than one!</p>
+
+    <div class="vote-legend">
+      <span>&#128154; Love it</span>
+      <span>&#128993; Could work</span>
+      <span>&#128683; Not for us</span>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#129367; Potluck</div><div class="vote-sub">Each family brings a dish</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="food-potluck-top" name="food-potluck" value="top"><label class="vote-top" for="food-potluck-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="food-potluck-maybe" name="food-potluck" value="maybe"><label class="vote-maybe" for="food-potluck-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="food-potluck-no" name="food-potluck" value="no"><label class="vote-no" for="food-potluck-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127829; Pizza / simple catering</div><div class="vote-sub">Delivery or pickup, split the cost</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="food-pizza-top" name="food-pizza" value="top"><label class="vote-top" for="food-pizza-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="food-pizza-maybe" name="food-pizza" value="maybe"><label class="vote-maybe" for="food-pizza-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="food-pizza-no" name="food-pizza" value="no"><label class="vote-no" for="food-pizza-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127871; Just snacks and drinks</div><div class="vote-sub">Keep it simple</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="food-snacks-top" name="food-snacks" value="top"><label class="vote-top" for="food-snacks-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="food-snacks-maybe" name="food-snacks" value="maybe"><label class="vote-maybe" for="food-snacks-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="food-snacks-no" name="food-snacks" value="no"><label class="vote-no" for="food-snacks-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="option-group" style="margin-top: 12px; margin-bottom: 12px;">
+      <div class="option-item">
+        <input type="checkbox" id="food-nopref" name="food-nopref" value="yes">
+        <label class="pill" for="food-nopref">&#128075; No preference &mdash; happy with whatever!</label>
+      </div>
+    </div>
+
+    <label class="field-label" for="food-other-text">Other food ideas?</label>
+    <input type="text" id="food-other-text" placeholder="e.g. taco truck, sandwich trays, etc.">
+  </div>
+
+  <!-- Allergies -->
+  <div class="card">
+    <div class="card-label">Allergies &amp; Dietary Restrictions</div>
+    <h2>Any food allergies or dietary restrictions we should know about?</h2>
+    <p class="subtitle">This helps us make sure every kid (and parent!) is covered.</p>
+    <textarea id="allergies" rows="2" placeholder="e.g. nut allergy, gluten-free, dairy-free, vegetarian, etc."></textarea>
+  </div>
+
+  <!-- Helping Out -->
   <div class="card">
     <div class="card-label">Helping Out</div>
-    <h2>Would you be willing to help with any of the following? <span style="font-size:14px; font-weight:400; color:#8292a6;">(select all that apply)</span></h2>
+    <h2>Would you be willing to help with any of the following?</h2>
     <p class="subtitle">No pressure &mdash; just trying to see where we have willing hands!</p>
-    <div class="option-group">
-      <div class="option-item">
-        <input type="checkbox" id="help-venue" name="help" value="venue">
-        <label class="pill" for="help-venue">&#128205; Researching / securing a venue or park permit</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-entertainment" name="help" value="entertainment">
-        <label class="pill" for="help-entertainment">&#127913; Booking entertainment or rentals (bouncy house, etc.)</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-food" name="help" value="food">
-        <label class="pill" for="help-food">&#127829; Snacks / food coordination</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-cake" name="help" value="cake">
-        <label class="pill" for="help-cake">&#127874; Cake / cupcakes</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-decorations" name="help" value="decorations">
-        <label class="pill" for="help-decorations">&#127880; Decorations</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-invite" name="help" value="invite">
-        <label class="pill" for="help-invite">&#128233; Invite / communication to the group</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-setup" name="help" value="setup">
-        <label class="pill" for="help-setup">&#128170; Day-of setup / cleanup</label>
-      </div>
-      <div class="option-item">
-        <input type="checkbox" id="help-anything" name="help" value="assign-me">
-        <label class="pill" for="help-anything">&#128588; Happy to help but no preference &mdash; assign me something!</label>
+
+    <div class="vote-legend">
+      <span>&#128154; Sign me up</span>
+      <span>&#128993; If needed</span>
+      <span>&#128683; Not for me</span>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#128205; Researching / securing a venue or park permit</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="help-venue-top" name="help-venue" value="top"><label class="vote-top" for="help-venue-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-venue-maybe" name="help-venue" value="maybe"><label class="vote-maybe" for="help-venue-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-venue-no" name="help-venue" value="no"><label class="vote-no" for="help-venue-no">&#128683;</label></div>
+        </div>
       </div>
     </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127913; Booking entertainment or rentals</div><div class="vote-sub">Bouncy house, magician, etc.</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="help-ent-top" name="help-entertainment" value="top"><label class="vote-top" for="help-ent-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-ent-maybe" name="help-entertainment" value="maybe"><label class="vote-maybe" for="help-ent-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-ent-no" name="help-entertainment" value="no"><label class="vote-no" for="help-ent-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127829; Snacks / food coordination</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="help-food-top" name="help-food" value="top"><label class="vote-top" for="help-food-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-food-maybe" name="help-food" value="maybe"><label class="vote-maybe" for="help-food-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-food-no" name="help-food" value="no"><label class="vote-no" for="help-food-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127874; Cake / cupcakes</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="help-cake-top" name="help-cake" value="top"><label class="vote-top" for="help-cake-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-cake-maybe" name="help-cake" value="maybe"><label class="vote-maybe" for="help-cake-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-cake-no" name="help-cake" value="no"><label class="vote-no" for="help-cake-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-row">
+        <div class="vote-info"><div class="vote-label">&#127880; Decorations</div></div>
+        <div class="vote-options">
+          <div class="vote-btn"><input type="radio" id="help-decor-top" name="help-decorations" value="top"><label class="vote-top" for="help-decor-top">&#128154;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-decor-maybe" name="help-decorations" value="maybe"><label class="vote-maybe" for="help-decor-maybe">&#128993;</label></div>
+          <div class="vote-btn"><input type="radio" id="help-decor-no" name="help-decorations" value="no"><label class="vote-no" for="help-decor-no">&#128683;</label></div>
+        </div>
+      </div>
+    </div>
+
+    <label class="field-label" for="help-comments" style="margin-top: 12px;">Anything else you'd like to help with?</label>
+    <textarea id="help-comments" rows="2" placeholder="Special talents, things you'd love to take on, or other ways you'd like to pitch in!"></textarea>
   </div>
 
   <!-- Anything Else -->
@@ -292,7 +473,7 @@
     <div class="card-label">Anything Else?</div>
     <h2>Any other thoughts, ideas, or notes?</h2>
     <p class="subtitle">Totally optional!</p>
-    <textarea id="anything-else" placeholder="Venue ideas, food allergies, activity suggestions, questions — anything at all!"></textarea>
+    <textarea id="anything-else" placeholder="Food allergies, questions, ideas — anything at all!"></textarea>
   </div>
 
   <button class="submit-btn" id="submit-btn" onclick="submitForm()">Submit</button>
@@ -302,39 +483,21 @@
 
 <iframe name="hidden-iframe" id="hidden-iframe" style="display:none;"></iframe>
 <form id="hidden-form" method="POST" target="hidden-iframe"
-  action="https://script.google.com/macros/s/AKfycbxN7RBOejdjzuKYHMRHstitaZOytp_xrNFii739j_MrnE4JZCPO6ytP5sfxupJyXs8uRw/exec">
+  action="https://script.google.com/macros/s/AKfycbzDqB1bEfZYGbOwj3WIDN9dzpTyM7x62SpGaWHurG9rYPtzDCRH9-61Cymfjt7jc3Rz7A/exec">
   <input type="hidden" name="data" id="form-data">
 </form>
 
 <script>
-  // Show/hide "other" food text field
-  document.querySelectorAll('input[name="food"]').forEach(function(radio) {
-    radio.addEventListener('change', function() {
-      document.getElementById('food-other-field').style.display =
-        this.value === 'other' ? 'block' : 'none';
-    });
-  });
-
   function submitForm() {
     // Validation
     var errors = [];
     var name = document.getElementById('parent-name').value.trim();
     var child = document.getElementById('child-name').value.trim();
     var email = document.getElementById('email').value.trim();
-    var timeChecked = document.querySelectorAll('input[name="time"]:checked');
-    var food = document.querySelector('input[name="food"]:checked');
-    var cake = document.querySelector('input[name="cake"]:checked');
-    var venue = document.querySelector('input[name="venue"]:checked');
-    var siblings = document.querySelector('input[name="siblings"]:checked');
 
     if (!name) errors.push("Your Name");
     if (!child) errors.push("Your Child(ren)");
     if (!email) errors.push("Best Email");
-    if (timeChecked.length === 0) errors.push("Time of day");
-    if (!food) errors.push("Food preference");
-    if (!cake) errors.push("Cake preference");
-    if (!venue) errors.push("Venue type");
-    if (!siblings) errors.push("Siblings question");
 
     if (errors.length > 0) {
       alert("Please fill in the following required fields:\n\n\u2022 " + errors.join("\n\u2022 "));
@@ -349,39 +512,52 @@
       "email": email
     };
 
-    // Time (multi-select)
-    var times = [];
-    timeChecked.forEach(function(cb) { times.push(cb.value); });
-    data["time"] = times.join(", ");
-
-    // Food
-    data["food"] = food.value;
-    if (food.value === "other") {
-      data["food-other"] = document.getElementById('food-other-text').value.trim();
+    // Helper: collect green/yellow/red vote for a radio group
+    function getVote(radioName) {
+      var sel = document.querySelector('input[name="' + radioName + '"]:checked');
+      return sel ? sel.value : "";
     }
 
-    // Cake
-    data["cake"] = cake.value;
+    // Time voting
+    data["time-morning"] = getVote("time-morning");
+    data["time-lunch"] = getVote("time-lunch");
+    data["time-afternoon"] = getVote("time-afternoon");
 
-    // Venue
-    data["venue"] = venue.value;
+    // Venue voting
+    data["venue-park"] = getVote("venue-park");
+    data["venue-indoor"] = getVote("venue-indoor");
+    data["venue-other"] = getVote("venue-other");
+    data["venue-comments"] = document.getElementById('venue-comments').value.trim();
 
-    // Activities (multi-select)
-    var activities = [];
-    document.querySelectorAll('input[name="activities"]:checked').forEach(function(cb) {
-      activities.push(cb.value);
-    });
-    data["activities"] = activities.join(", ");
+    // Activities voting
+    data["act-bouncy"] = getVote("act-bouncy");
+    data["act-entertainment"] = getVote("act-entertainment");
+    data["act-sports"] = getVote("act-sports");
+    data["act-craft"] = getVote("act-craft");
+    data["activity-comments"] = document.getElementById('activity-comments').value.trim();
 
-    // Siblings
-    data["siblings"] = siblings.value;
+    // Cake voting
+    data["cake-sheet"] = getVote("cake-sheet");
+    data["cake-cupcakes"] = getVote("cake-cupcakes");
+    data["cake-nopref"] = document.getElementById('cake-nopref').checked ? "yes" : "";
 
-    // Help (multi-select)
-    var helpItems = [];
-    document.querySelectorAll('input[name="help"]:checked').forEach(function(cb) {
-      helpItems.push(cb.value);
-    });
-    data["help"] = helpItems.join(", ");
+    // Food voting
+    data["food-potluck"] = getVote("food-potluck");
+    data["food-pizza"] = getVote("food-pizza");
+    data["food-snacks"] = getVote("food-snacks");
+    data["food-nopref"] = document.getElementById('food-nopref').checked ? "yes" : "";
+    data["food-other"] = document.getElementById('food-other-text').value.trim();
+
+    // Allergies
+    data["allergies"] = document.getElementById('allergies').value.trim();
+
+    // Helping Out voting
+    data["help-venue"] = getVote("help-venue");
+    data["help-entertainment"] = getVote("help-entertainment");
+    data["help-food"] = getVote("help-food");
+    data["help-cake"] = getVote("help-cake");
+    data["help-decorations"] = getVote("help-decorations");
+    data["help-comments"] = document.getElementById('help-comments').value.trim();
 
     // Anything else
     data["anything-else"] = document.getElementById('anything-else').value.trim();
